@@ -110,7 +110,7 @@
                   <td>{{ prod.precio }}</td>
                   <td>{{ prod.cantidad }}</td>
                   <td>
-                      <button class="btn btn-info btn-xs">agregar carrito</button>
+                      <button class="btn btn-info btn-xs" @click="addCarrito(prod)">agregar carrito</button>
                   </td>
                 </tr>
               </tbody>
@@ -122,7 +122,25 @@
         <div class="card bg-info">
           <div class="card-body">
             <h2>Carrito</h2>
-            {{ carrito }}
+            
+            <table class="table">
+                <tr>
+                    <td>NOMBRE</td>
+                    <td>PU</td>
+                    <td>Cant.</td>
+                    <td>S.T.</td>
+                    <td>ACCION</td>
+                </tr>
+                <tr v-for="(c, index) in carrito" :key="index">
+                    <td>{{ c.nombre }}</td>
+                    <td>{{ c.precio }}</td>
+                    <td>{{ c.cantidad }}</td>
+                    <td>{{ c.precio * c.cantidad }}</td>
+                    <td>
+                        
+                    </td>
+                </tr>
+            </table>
           </div>
         </div>
       </div>
@@ -164,8 +182,15 @@ export default {
     },
     modificarProducto() {},
     eliminarProducto() {},
-    addCarrito(){
-        
+    addCarrito(producto){
+        const { id, nombre, precio, cantidad } = producto;
+        let obj = {
+            id: id,
+            nombre: nombre,
+            precio: precio,
+            cantidad: 1
+        }
+        this.carrito.push(obj)
     }
   },
 };
