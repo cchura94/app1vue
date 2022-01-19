@@ -141,6 +141,7 @@
                     </td>
                 </tr>
             </table>
+            <h3>TOTAL: {{ total }}</h3>
           </div>
         </div>
       </div>
@@ -162,7 +163,8 @@ export default {
         detalle: "",
       },
       cargando: true,
-      carrito: []
+      carrito: [],
+      total: 0
     };
   },
   mounted() {
@@ -190,7 +192,24 @@ export default {
             precio: precio,
             cantidad: 1
         }
-        this.carrito.push(obj)
+        if(!this.buscarIdCarrito(id)){
+            this.carrito.push(obj)
+        }
+        producto.cantidad--;
+        this.total += parseFloat(producto.precio)
+    },
+    buscarIdCarrito(id){
+        let cont = 0;
+        this.carrito.forEach(function(prod){
+            if(prod.id == id){
+                prod.cantidad++;
+                cont++;
+            }
+        });
+        if(cont>0){
+            return true
+        }
+        return false;
     }
   },
 };
