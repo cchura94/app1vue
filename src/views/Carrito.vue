@@ -70,6 +70,7 @@
                       type="button"
                       class="btn btn-primary"
                       @click="guardarProducto()"
+                      data-bs-dismiss="modal"
                     >
                       Guardar Producto
                     </button>
@@ -87,6 +88,11 @@
           <div class="card-body">
             <h2>Lista de Productos</h2>
 
+            <h2 v-if="cargando">Cargando...</h2>
+            <div class="progress" v-if="cargando">
+                <div class="progress-bar progress-bar-striped bg-danger" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+
             <table class="table table-striped table-hover">
               <thead>
                 <tr>
@@ -103,7 +109,9 @@
                   <td>{{ prod.nombre }}</td>
                   <td>{{ prod.precio }}</td>
                   <td>{{ prod.cantidad }}</td>
-                  <td></td>
+                  <td>
+                      <button class="btn btn-info btn-xs">agregar carrito</button>
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -111,9 +119,10 @@
         </div>
       </div>
       <div class="col-md-5">
-        <div class="card bg-danger">
+        <div class="card bg-info">
           <div class="card-body">
             <h2>Carrito</h2>
+            {{ carrito }}
           </div>
         </div>
       </div>
@@ -134,6 +143,8 @@ export default {
         cantidad: 0,
         detalle: "",
       },
+      cargando: true,
+      carrito: []
     };
   },
   mounted() {
@@ -142,8 +153,10 @@ export default {
   },
   methods: {
     async listarProductos() {
+        this.cargando = true
       const { data } = await axios.get("http://127.0.0.1:8000/api/producto");
       this.lista_productos = data;
+      this.cargando = false
     },
     async guardarProducto() {
       await axios.post("http://127.0.0.1:8000/api/producto", this.producto);
@@ -151,6 +164,9 @@ export default {
     },
     modificarProducto() {},
     eliminarProducto() {},
+    addCarrito(){
+        
+    }
   },
 };
 </script>
