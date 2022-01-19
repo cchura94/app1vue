@@ -57,8 +57,12 @@
                       class="form-control"
                       v-model="producto.precio"
                     />
+
+                    <input type="file" ref="img" @change="imagenSeleccionada">
                   </div>
                   <div class="modal-footer">
+                      <button @click="actualizarImagen(1)">Subir Imagen</button>
+
                     <button
                       type="button"
                       class="btn btn-secondary"
@@ -100,6 +104,7 @@
                   <th>NOMBRE</th>
                   <th>PRECIO</th>
                   <th>CANTIDAD</th>
+                  <th>IMAGEN</th>
                   <th>ACCIONES</th>
                 </tr>
               </thead>
@@ -109,6 +114,9 @@
                   <td>{{ prod.nombre }}</td>
                   <td>{{ prod.precio }}</td>
                   <td>{{ prod.cantidad }}</td>
+                  <td>
+                      <img :src="`http://127.0.0.1:8000${prod.imagen}`" alt="" width="100px">
+                  </td>
                   <td>
                       <button class="btn btn-info btn-xs" @click="addCarrito(prod)">agregar carrito</button>
                   </td>
@@ -164,7 +172,8 @@ export default {
       },
       cargando: true,
       carrito: [],
-      total: 0
+      total: 0,
+      imagen_seleccionada:null
     };
   },
   mounted() {
@@ -210,6 +219,15 @@ export default {
             return true
         }
         return false;
+    },
+    imagenSeleccionada(event){
+        console.log(event.target.files[0])
+        this.imagen_seleccionada = event.target.files[0]
+    },
+    async actualizarImagen(id){
+        let formData = new FormData;
+        formData.append("imagen", this.imagen_seleccionada)
+        await axios.post("http://127.0.0.1:8000/api/producto/"+id+"/imagen", formData)
     }
   },
 };
